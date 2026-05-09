@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model UserSettings {
+  id                     Int      @id @default(autoincrement())
+  capitalTotal           Decimal  @db.Decimal(15, 2)
+  maxRiskPercentPerTrade Decimal  @db.Decimal(5, 2)
+  maxOpenPositions       Int
+  defaultBrokerageFee    Decimal  @db.Decimal(5, 4)
+  defaultSellFee         Decimal  @db.Decimal(5, 4)
+  updatedAt              DateTime @updatedAt
+}
+
+model Trade {
+  id                  Int          @id @default(autoincrement())
+  symbol              String       @db.VarChar(10)
+  stockName           String?
+  direction           Direction
+  status              TradeStatus  @default(OPEN)
+  entryDate           DateTime
+  exitDate            DateTime?
+  entryPrice          Decimal      @db.Decimal(12, 2)
+  exitPrice           Decimal?     @db.Decimal(12, 2)
+  lotSize             Int
+  shares              Int
+  entryValue          Decimal      @db.Decimal(15, 2)
+  exitValue           Decimal?     @db.Decimal(15, 2)
+  brokerageFeeEntry   Decimal      @db.Decimal(12, 2)
+  brokerageFeeExit    Decimal?     @db.Decimal(12, 2)
+  stopLossPrice       Decimal?     @db.Decimal(12, 2)
+  takeProfitPrice     Decimal?     @db.Decimal(12, 2)
+  riskAmount          Decimal?     @db.Decimal(12, 2)
+  riskPercent         Decimal?     @db.Decimal(5, 2)
+  rewardRiskRatio     Decimal?     @db.Decimal(5, 2)
+  realizedPnL         Decimal?     @db.Decimal(12, 2)
+  realizedPnLPercent  Decimal?     @db.Decimal(7, 4)
+  strategy            String?
+  sector              String?
+  notes               String?      @db.Text
+  exitReason          ExitReason?
+  emotionEntry        EmotionEntry?
+  emotionExit         EmotionExit?
+  tags                String?
+  deletedAt           DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+model JournalEntry {
+  id              Int              @id @default(autoincrement())
+  date            DateTime         @unique
+  marketCondition MarketCondition
+  body            String           @db.Text
+  mood            Mood
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+enum Direction {
+  LONG
+  SHORT
+}
+
+enum TradeStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+enum ExitReason {
+  TAKE_PROFIT
+  STOP_LOSS
+  MANUAL
+  EXPIRED
+}
+
+enum EmotionEntry {
+  CONFIDENT
+  UNCERTAIN
+  FOMO
+  DISCIPLINED
+}
+
+enum EmotionExit {
+  SATISFIED
+  REGRET
+  NEUTRAL
+  FEAR
+}
+
+enum MarketCondition {
+  BULLISH
+  BEARISH
+  SIDEWAYS
+  VOLATILE
+}
+
+enum Mood {
+  GREAT
+  GOOD
+  NEUTRAL
+  BAD
+  TERRIBLE
+}
