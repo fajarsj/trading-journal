@@ -3,6 +3,7 @@ import { StatsGrid } from "@/components/dashboard/StatsGrid";
 import { PnLChart } from "@/components/dashboard/PnLChart";
 import { WinRateChart } from "@/components/dashboard/WinRateChart";
 import { EquityCurve } from "@/components/dashboard/EquityCurve";
+import { ChecklistWidget } from "@/components/checklist/ChecklistWidget";
 import { TradeTable } from "@/components/trades/TradeTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -98,7 +99,10 @@ export default async function DashboardPage(): Promise<React.JSX.Element> {
         <div className="lg:col-span-2">
           <PnLChart data={statsData?.monthlyPnL ?? []} />
         </div>
-        <WinRateChart stats={stats} />
+        <div className="space-y-4">
+          <ChecklistWidget />
+          <WinRateChart stats={stats} />
+        </div>
       </div>
 
       <EquityCurve data={statsData?.equityCurve ?? []} />

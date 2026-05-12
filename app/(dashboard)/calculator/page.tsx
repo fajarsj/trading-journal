@@ -1,18 +1,20 @@
 import { PositionCalculator } from "@/components/calculator/PositionCalculator";
 import type { UserSettings } from "@/types/trading";
 
+const FALLBACK_SETTINGS: UserSettings = {
+  id: 0, capitalTotal: 10000000, maxRiskPercentPerTrade: 2, maxOpenPositions: 5,
+  defaultBrokerageFee: 0.0019, defaultSellFee: 0.0029, updatedAt: new Date().toISOString(),
+};
+
 async function getSettings(): Promise<UserSettings> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"}/api/settings`, {
       cache: "no-store",
     });
     const json = await res.json();
-    return json.data;
+    return json.data ?? FALLBACK_SETTINGS;
   } catch {
-    return {
-      id: 0, capitalTotal: 0, maxRiskPercentPerTrade: 2, maxOpenPositions: 5,
-      defaultBrokerageFee: 0.0019, defaultSellFee: 0.0029, updatedAt: new Date().toISOString(),
-    };
+    return FALLBACK_SETTINGS;
   }
 }
 

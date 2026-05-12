@@ -9,11 +9,33 @@ import {
   BookOpen,
   Settings,
   TrendingUp,
+  ClipboardCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useChecklist } from "@/hooks/useChecklist";
+
+function ChecklistBadge(): React.JSX.Element | null {
+  const { checklist } = useChecklist();
+  if (!checklist) return null;
+  if (checklist.isReady) {
+    return (
+      <span className="ml-auto text-xs rounded-full px-1.5 py-0.5 bg-emerald-100 text-emerald-700 font-medium">
+        Siap
+      </span>
+    );
+  }
+  const remaining = checklist.totalItems - checklist.completedItems;
+  if (remaining === 0) return null;
+  return (
+    <span className="ml-auto text-xs rounded-full px-1.5 py-0.5 bg-amber-100 text-amber-700 font-medium tabular-nums">
+      {remaining}
+    </span>
+  );
+}
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/checklist", label: "Pre-Market", icon: ClipboardCheck, badge: true },
   { href: "/calculator", label: "Kalkulator", icon: Calculator },
   { href: "/trades", label: "Log Transaksi", icon: ListOrdered },
   { href: "/journal", label: "Jurnal", icon: BookOpen },
@@ -30,7 +52,7 @@ export function Sidebar(): React.JSX.Element {
         <span className="font-bold text-lg tracking-tight">Trading Journal</span>
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map(({ href, label, icon: Icon }) => (
+        {navItems.map(({ href, label, icon: Icon, badge }) => (
           <Link
             key={href}
             href={href}
@@ -41,8 +63,9 @@ export function Sidebar(): React.JSX.Element {
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             )}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-4 w-4 shrink-0" />
             {label}
+            {badge && <ChecklistBadge />}
           </Link>
         ))}
       </nav>
