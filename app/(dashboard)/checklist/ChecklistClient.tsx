@@ -75,20 +75,20 @@ export function ChecklistClient(): React.JSX.Element {
         </div>
       </div>
 
-      {/* Market Regime + Trading Rules */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <MarketRegimeSelector
-          currentRegime={checklist.marketRegime}
-          setAt={checklist.marketRegimeSetAt}
-          onSave={(regime: MarketRegime) => saveRegime(regime)}
-        />
-        <TradingRulesAck
-          rulesAcknowledged={checklist.rulesAcknowledged}
-          rulesAcknowledgedAt={checklist.rulesAcknowledgedAt}
-          acknowledgedRules={checklist.acknowledgedRules}
-          onAcknowledge={(rules) => saveRules(rules)}
-        />
-      </div>
+      {/* Market Regime */}
+      <MarketRegimeSelector
+        currentRegime={checklist.marketRegime}
+        setAt={checklist.marketRegimeSetAt}
+        onSave={(regime: MarketRegime) => saveRegime(regime)}
+      />
+
+      {/* Trading Rules */}
+      <TradingRulesAck
+        rulesAcknowledged={checklist.rulesAcknowledged}
+        rulesAcknowledgedAt={checklist.rulesAcknowledgedAt}
+        acknowledgedRules={checklist.acknowledgedRules}
+        onAcknowledge={(rules) => saveRules(rules)}
+      />
 
       {/* Sections */}
       <div className="space-y-3">
