@@ -9,6 +9,19 @@ export interface EntryLeg {
   isAuto: boolean;
 }
 
+export interface CalculatorSnapshot {
+  id: string;
+  name: string;
+  savedAt: string;
+  capitalIDR: number;
+  riskPercent: number;
+  entries: EntryLeg[];
+  stopLossPrice: number;
+  takeProfitPrice: number;
+  buyFeeRate: number;
+  sellFeeRate: number;
+}
+
 interface CalculatorState {
   capitalIDR: number;
   riskPercent: number;
@@ -28,6 +41,7 @@ interface CalculatorState {
   updateEntryPrice: (id: string, price: number) => void;
   updateEntryLots: (id: string, lots: number) => void;
   toggleEntryAuto: (id: string) => void;
+  loadSnapshot: (snap: CalculatorSnapshot) => void;
   reset: () => void;
 }
 
@@ -73,5 +87,15 @@ export const useCalculatorStore = create<CalculatorState>((set) => ({
         e.id === id ? { ...e, isAuto: !e.isAuto } : e
       ),
     })),
+  loadSnapshot: (snap) =>
+    set({
+      capitalIDR: snap.capitalIDR,
+      riskPercent: snap.riskPercent,
+      entries: snap.entries.map((e) => ({ ...e, id: crypto.randomUUID() })),
+      stopLossPrice: snap.stopLossPrice,
+      takeProfitPrice: snap.takeProfitPrice,
+      buyFeeRate: snap.buyFeeRate,
+      sellFeeRate: snap.sellFeeRate,
+    }),
   reset: () => set({ ...DEFAULT_STATE, entries: [newLeg()] }),
 }));

@@ -10,6 +10,7 @@ import { formatIDR } from "@/lib/formatters";
 import { calculateAutoLots } from "@/lib/calculations";
 import { Plus, Trash2, RotateCcw } from "lucide-react";
 import type { UserSettings } from "@/types/trading";
+import { SavedSetups } from "./SavedSetups";
 
 interface PositionCalculatorProps {
   settings: UserSettings;
@@ -186,6 +187,8 @@ export function PositionCalculator({ settings }: PositionCalculatorProps): React
         >
           <RotateCcw className="h-3.5 w-3.5" /> Reset
         </Button>
+
+        <SavedSetups />
       </div>
 
       {/* ── Right: results ── */}
